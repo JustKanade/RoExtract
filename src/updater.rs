@@ -99,10 +99,10 @@ fn save_install_script() -> PathBuf {
     let temp_dir = logic::get_temp_dir(false);
     let path = temp_dir.join("installer.bat");
 
-    if temp_dir != "" {
+    if temp_dir != PathBuf::new() {
         match fs::write(&path, include_str!("installer/installer.bat")) {
-            Ok(_) => log::info(&format!("File written to {}", path)),
-            Err(e) => log::critical_error(&format!("Failed to write to {}: {}", path, e))
+            Ok(_) => log::info(&format!("File written to {}", path.display())),
+            Err(e) => log::critical_error(&format!("Failed to write to {}: {}", path.display(), e))
         }
         
         return path;
