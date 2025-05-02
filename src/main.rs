@@ -7,6 +7,8 @@ mod updater;
 mod config;
 mod locale;
 
+use std::path::PathBuf;
+
 use clap::{Parser, ValueEnum};
 
 // CLI stuff
@@ -48,7 +50,7 @@ struct Cli {
 
     /// Define a destination path
     #[arg(short, long)]
-    dest: Option<String>,
+    dest: Option<PathBuf>,
 
     /// Swap two assets
     #[arg(short, long)]
@@ -73,31 +75,15 @@ fn get_tab(category: Category) -> String {
 }
 
 fn list(tab: String) {
-    let cache_directory = {
-        let cache_dir = logic::get_cache_directory();
-        // Music tab just adds .ogg while other tabs scrape the header files from HTTP to allow all media players to play it
-        if tab == "music" {
-            format!("{}/sounds", cache_dir)
-        } else {
-            format!("{}/http", cache_dir)
-        }
-    };
+    let cache_directory = logic::get_mode_cache_directory(&tab);
     logic::refresh(cache_directory, tab, true, true); // cli_list_mode is set to true, this will print assets to console
 }
 
-fn extract(tab: String, asset: Option<String>, destination: Option<String>, add_extention: bool) {
-    let cache_directory = {
-        let cache_dir = logic::get_cache_directory();
-        // Music tab just adds .ogg while other tabs scrape the header files from HTTP to allow all media players to play it
-        if tab == "music" {
-            format!("{}/sounds", cache_dir)
-        } else {
-            format!("{}/http", cache_dir)
-        }
-    };
+fn extract(tab: String, asset: Option<String>, destination: Option<PathBuf>, add_extention: bool) {
+    let cache_directory = logic::get_mode_cache_directory(&tab);
     if let Some(asset) = asset {
-        let dest = destination.unwrap_or(asset.clone());
-        logic::extract_file(format!("{}/{}", cache_directory, asset), tab, dest, add_extention);
+        let dest = destination.unwrap_or(asset.clone().into());
+        logic::extract_file(cache_directory.join(asset), &tab, dest, add_extention);
     } else {
         if let Some(dest) = destination {
             logic::refresh(cache_directory.clone(), tab.clone(), true, true);
@@ -138,17 +124,14 @@ fn main() {
         }
     } else if let Some(asset) = args.swap {
         if let Some(dest) = args.dest {
-            let dir = match args.mode {
-                Some(Category::Music) => &format!("{}/sounds", &logic::get_cache_directory()), //sounds if music
-                _ => &format!("{}/http", &logic::get_cache_directory())
-            };
+            let dir = logic::get_mode_cache_directory(&get_tab(args.mode.unwrap_or(Category::Images)));
 
-            logic::swap_assets(dir, &asset, &dest);
+            logic::swap_assets(dir, &asset, &dest.to_string_lossy().to_string());
         } else {
             eprintln!("--dest is required for swapping assets, --help for more details")
         }
     } else if args.cache_dir {
-        println!("{}", logic::get_cache_directory());
+        println!("{}", logic::get_cache_directory().display());
     } else if args.check_for_updates {
         updater::check_for_updates(false, false);
     } else if args.download_new_update {
@@ -157,6 +140,9 @@ fn main() {
         // If nothing passed, run GUI
         gui::run_gui();
     }
+    
+    // The program is now closing
+    config::save_config_file();
     
     if !updater::run_install_script(false) {
         // Only run if the install script hasn't ran

@@ -19,7 +19,7 @@ button-finish = Fertig
 button-delete-this-dir = Lösche diesen Ordner <Del>
 button-extract-type = Extrahiere alle von diesen Typen <F3>
 button-refresh = Neuladen <F5>
-button-clear-cache = Lösche Roblox Cache <Del>
+button-clear-cache = Lösche Cache <Del>
 button-extract-all = Extrahiere alles <F3>
 
 # Bestätigungen
@@ -28,8 +28,8 @@ confirmation-delete-confirmation-title = Lösche Dateien
 confirmation-delete-confirmation-description = Bist du dir Sicher das alle Dateien in diesem Ordner löschen willst?
 confirmation-filter-confirmation-title = Dateien werden noch gefiltert.
 confirmation-filter-confirmation-description = Bist du dir sicher das du die Dateien extrahieren willst während das Program noch filtert? Das Ergebnis wird in einer unvollständigen Extraktion enden.
-confirmation-clear-cache-title = Lösche Roblox Cache
-confirmation-clear-cache-description = Bist du dir sicher das du deinen Roblox Cache löschen willst? Die Dateien werden neugeneriert wenn der Roblox Client geladen wurde.
+confirmation-clear-cache-title = Lösche Cache
+confirmation-clear-cache-description = Bist du dir sicher das du deinen Cache löschen willst? Die Dateien werden neugeneriert wenn der Client geladen wurde.
 
 # Fehler
 error-invalid-directory-description = Bitte stelle sicher dass der Pfad den du angegeben hast ein Ordner ist!
@@ -37,7 +37,7 @@ error-invalid-directory-title = Ungültiger Ordner!
 error-temporary-directory-description = Fehler: Konnte keinen temporären Ordner erstellen! Hast du lese/schreib Rechte zu den temporären Ordner? Wenn dieser Fehler bestehen bleibt, versuche es im Administratormodus auszuführen
 error-directory-detection-title = Ordnererkennung fehlgeschlagen!
 error-temporary-directory-title = Konnte keinen temporären Ordner erstellen!
-error-directory-detection-description = Ordnererkennung fehlgeschlagen! Ist Roblox installiert und hast du es einmal ausgeführt? #
+error-directory-detection-description = Ordnererkennung fehlgeschlagen! Ist installiert und hast du es einmal ausgeführt? #
 no-files = Keine Dateien zum Anzeigen
 error-directory-detection = Ordnererkennung fehlgeschlagen.
 
@@ -53,8 +53,8 @@ automatically-install-updates = Automatisch Aktualisierungen installieren
 
 
 # Beschreibungen
-custom-cache-dir-description = Wenn du den Cache in einer anderen Roblox Installation zugreifen willst, änder den Cacheordner unten, du kannst ihn mit den anderen Knopf zum Standart zurücksetzen.
-clear-cache-description = Wenn es zu lange brauch um alle Dateien anzuzeigen und zuextrahieren, kannst du deinen Roblox Cache mit den Knopf unten löschen. Das Entfernt alle Dateien von deinen Cache und der Roblox Client wird sie automatisch neu erstellen wenn benötigt.
+custom-cache-dir-description = Wenn du den Cache in einer anderen Installation zugreifen willst, änder den Cacheordner unten, du kannst ihn mit den anderen Knopf zum Standart zurücksetzen.
+clear-cache-description = Wenn es zu lange brauch um alle Dateien anzuzeigen und zuextrahieren, kannst du deinen Cache mit den Knopf unten löschen. Das Entfernt alle Dateien von deinen Cache und der Client wird sie automatisch neu erstellen wenn benötigt.
 extract-all-description = Dieser Knopf unten wird alle Assets kopieren und Ordner für diese erstellen z.B /sounds, /images um diese zu Kategorisieren. Du kannst den Root Ordner beim Starten auswählen.
 
 # Status

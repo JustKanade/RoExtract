@@ -1,4 +1,4 @@
-use std::{fs, sync::Mutex};
+use std::{fs, path::PathBuf, sync::Mutex};
 
 use reqwest::blocking::Client;
 use serde::Deserialize;
@@ -9,12 +9,11 @@ use crate::{config, log, logic};
 mod gui;
 
 lazy_static! {
-    static ref UPDATE_FILE: Mutex<Option<String>> = Mutex::new(None);
-
+    static ref UPDATE_FILE: Mutex<Option<PathBuf>> = Mutex::new(None);
 }
 
-static URL: &str = "https://api.github.com/repos/AeEn123/Roblox-assets-extractor/releases/latest";
-static PRERELEASE_URL: &str = "https://api.github.com/repos/AeEn123/Roblox-assets-extractor/releases";
+static URL: &str = "https://api.github.com/repos/AeEn123/RoExtract/releases/latest";
+static PRERELEASE_URL: &str = "https://api.github.com/repos/AeEn123/RoExtract/releases";
 
 #[derive(Deserialize, Debug, Clone)]
 struct Asset {
@@ -79,26 +78,26 @@ fn update_action(json: Release, run_gui: bool, auto_download_update: bool) {
 }
 
 #[cfg(target_family = "unix")]
-fn save_install_script() -> String {
+fn save_install_script() -> PathBuf {
     let temp_dir = logic::get_temp_dir(false);
-    let path = format!("{}/installer.sh", temp_dir);
+    let path = temp_dir.join("installer.sh");
 
-    if temp_dir != "" {
+    if temp_dir != PathBuf::new() {
         match fs::write(&path, include_str!("installer/installer.sh")) {
-            Ok(_) => log::info(&format!("File written to {}", path)),
-            Err(e) => log::critical_error(&format!("Failed to write to {}: {}", path, e))
+            Ok(_) => log::info(&format!("File written to {}", path.display())),
+            Err(e) => log::critical_error(&format!("Failed to write to {}: {}", path.display(), e))
         }
         
         return path;
     } else {
-        return "".to_string();
+        return PathBuf::new();
     }
 }
 
 #[cfg(target_os = "windows")]
-fn save_install_script() -> String {
+fn save_install_script() -> PathBuf {
     let temp_dir = logic::get_temp_dir(false);
-    let path = format!("{}\\installer.bat", temp_dir);
+    temp_dir.join("installer.bat");
 
     if temp_dir != "" {
         match fs::write(&path, include_str!("installer/installer.bat")) {
@@ -108,7 +107,7 @@ fn save_install_script() -> String {
         
         return path;
     } else {
-        return "".to_string();
+        return PathBuf::new();
     }
 }
 
@@ -123,17 +122,14 @@ pub fn download_update(url: &str, tag_name: Option<&str>) {
 
     let response = client
         .get(url)
-        .header("User-Agent", "Roblox-assets-extractor (Rust)") // Set a User-Agent otherwise it returns 403
+        .header("User-Agent", "RoExtract (Rust)") // Set a User-Agent otherwise it returns 403
         .send();
 
     match response {
         Ok(data) => {
             match data.bytes() {
                 Ok(bytes) => {
-                    #[cfg(target_os = "windows")]
-                    let path = format!("{}\\{}", temp_dir, filename);
-                    #[cfg(target_family = "unix")]
-                    let path = format!("{}/{}", temp_dir, filename);
+                    let path = temp_dir.join(filename);
                     match fs::write(path.clone(), bytes) {
                         Ok(_) => {
                             set_update_file(path);
@@ -142,21 +138,21 @@ pub fn download_update(url: &str, tag_name: Option<&str>) {
                         Err(e) => log::error(&format!("Failed to write file: {}", e))
                     }
                 }
-                Err(e) => log::error(&format!("Failed to parse: {}", e))
+                Err(e) => log::error(&format!("Download failed: Failed to parse: {}", e))
             }
         }
         Err(e) => log::error(&format!("Failed to download: {}", e)),
     }
 }
 
-pub fn set_update_file(file: String) {
+pub fn set_update_file(file: PathBuf) {
     let mut update_file = UPDATE_FILE.lock().unwrap();
     *update_file = Some(file)
 }
 
 pub fn run_install_script(run_afterwards: bool) -> bool {
     if let Some(update_file) = {UPDATE_FILE.lock().unwrap().clone()} {
-        log::info(&format!("Installing from {}", update_file));
+        log::info(&format!("Installing from {}", update_file.display()));
         if config::get_system_config_bool("prefer-installers").unwrap_or(false) {
             // Just run the installer
             match open::that(update_file) {
@@ -168,13 +164,13 @@ pub fn run_install_script(run_afterwards: bool) -> bool {
         } else {
             // Run install script
             let install_script = save_install_script();
-            if install_script != "" {
+            if install_script != PathBuf::new() {
                 #[cfg(target_os = "windows")]
                 let mut command = std::process::Command::new("cmd");
                 #[cfg(target_family = "unix")]
                 let mut command = std::process::Command::new("sh");
     
-                let program_path = std::env::current_exe().unwrap().to_string_lossy().to_string();
+                let program_path = std::env::current_exe().unwrap();
                 
                 #[cfg(target_family = "unix")]
                 if run_afterwards {
@@ -210,12 +206,12 @@ pub fn check_for_updates(run_gui: bool, auto_download_update: bool) {
     let response = if include_prerelease {
         client
         .get(PRERELEASE_URL)
-        .header("User-Agent", "Roblox-assets-extractor (Rust)")
+        .header("User-Agent", "RoExtract (Rust)")
         .send()
     } else {
         client
         .get(URL)
-        .header("User-Agent", "Roblox-assets-extractor (Rust)") // Set a User-Agent otherwise it returns 403
+        .header("User-Agent", "RoExtract (Rust)") // Set a User-Agent otherwise it returns 403
         .send()
     };
 
@@ -231,7 +227,7 @@ pub fn check_for_updates(run_gui: bool, auto_download_update: bool) {
                         update_action(json, run_gui, auto_download_update);
                       }                      
                     },
-                    Err(e) => log::error(&format!("Failed to parse json: {}", e))
+                    Err(e) => log::error(&format!("Updater failed to parse json: {}", e))
                 };
             } else {
                 match serde_json::from_str::<Release>(&text) {
@@ -244,7 +240,7 @@ pub fn check_for_updates(run_gui: bool, auto_download_update: bool) {
                             log::info("No updates are available.")
                         }
                     }
-                    Err(e) => log::error(&format!("Failed to parse json: {}", e))
+                    Err(e) => log::error(&format!("Updater Failed to parse json: {}", e))
                 }
             }
         }

@@ -1,4 +1,4 @@
-use std::{fs, sync::Mutex};
+use std::{fs, path::PathBuf, sync::Mutex};
 use serde_json::{json, Value};
 use lazy_static::lazy_static;
 
@@ -7,19 +7,19 @@ use crate::{log, logic};
 lazy_static! {
     static ref CONFIG: Mutex<Value> = Mutex::new(read_config_file());
     static ref SYSTEM_CONFIG: Mutex<Value> = Mutex::new(read_system_config());
-    static ref CONFIG_FILE: Mutex<String> = Mutex::new(detect_config_file());
+    static ref CONFIG_FILE: Mutex<PathBuf> = Mutex::new(detect_config_file());
 }
 
-const SYSTEM_CONFIG_FILE: &str = "Roblox-assets-extractor-system.json";
-const DEFAULT_CONFIG_FILE: &str = "Roblox-assets-extractor-config.json";
+const SYSTEM_CONFIG_FILE: &str = "RoExtract-system.json";
+const DEFAULT_CONFIG_FILE: &str = "RoExtract-config.json";
 
 // Define local functions
-fn detect_config_file() -> String {
+fn detect_config_file() -> PathBuf {
     if let Some(config_path) = get_system_config_string("config-path") {
-        return logic::resolve_path(&config_path);
+        return PathBuf::from(logic::resolve_path(&config_path));
         
     } else {
-        return DEFAULT_CONFIG_FILE.to_string()
+        return DEFAULT_CONFIG_FILE.into()
     }
 }
 
@@ -112,20 +112,8 @@ pub fn get_asset_alias(asset: &str) -> String {
 
 pub fn set_config(value: Value) {
     let mut config = CONFIG.lock().unwrap();
-    // Write config file only if config changes
+    // Change only if it changes
     if *config != value {
-        match serde_json::to_vec_pretty(&value) {
-            Ok(data) => {
-                let result = fs::write(CONFIG_FILE.lock().unwrap().clone(), data);
-                if result.is_err() {
-                    log::error(&format!("Failed to write config file: {}", result.unwrap_err()))
-                }
-            },
-            Err(e) => {
-                log::error(&format!("Failed to write config file: {}", e));
-            }
-        }
-        
         *config = value;
     }
 }
@@ -166,4 +154,20 @@ pub fn get_system_config_bool(key: &str) -> Option<bool> {
         return None;
     }
    
+}
+
+
+pub fn save_config_file() {
+    let config = CONFIG.lock().unwrap().clone();
+    match serde_json::to_vec_pretty(&config) {
+        Ok(data) => {
+            let result = fs::write(CONFIG_FILE.lock().unwrap().clone(), data);
+            if result.is_err() {
+                log::critical_error(&format!("Failed to write config file: {}", result.unwrap_err()))
+            }
+        },
+        Err(e) => {
+            log::critical_error(&format!("Failed to write config file: {}", e));
+        }
+    }
 }

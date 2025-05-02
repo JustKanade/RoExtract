@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
-Name=Roblox Assets Extractor
+Name=RoExtract
 Comment=A safe way to extract assets from your Roblox installation.
 Categories=Utility
-Exec=Roblox-assets-extractor
-Icon=Roblox-assets-extractor
+Exec=RoExtract
+Icon=RoExtract
 Terminal=false

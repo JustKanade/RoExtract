@@ -35,7 +35,7 @@ button-no = Nie
 button-rename = Zmień nazwę <F2>
 
 # Confirmations
-confirmation-ban-warning-description = Edytowanie zasobów w grach może spowodować inne zachowanie gry Roblox i możliwy jest ban twojego konta! Używaj pod własnym ryzykiem
+confirmation-ban-warning-description = Edytowanie zasobów w grach może spowodować inne zachowanie gry i możliwy jest ban twojego konta! Używaj pod własnym ryzykiem
 confirmation-ban-warning-title = Możliwość bana
 confirmation-generic-confirmation-title = Potwierdzenie
 confirmation-delete-confirmation-title = Usuwanie plików
@@ -51,7 +51,7 @@ confirmation-custom-directory-description = Czy chcesz wybrać inny katalog pami
 generic-error-critical = Błąd krytyczny
 no-files = Brak plików do wyświetlenia.
 error-directory-detection-title = Nie udało się wykryć katalogu
-error-directory-detection-description = Wykrycie katalogu nieudane! Czy gra Roblox jest zainstalowana i czy uruchomiłeś(aś) ją raz?
+error-directory-detection-description = Wykrycie katalogu nieudane! Czy gra jest zainstalowana i czy uruchomiłeś(aś) ją raz?
 error-temporary-directory-title = Nie udało się utworzyć katalogu tymczasowego.
 error-temporary-directory-description = Błąd: Nie udało się stworzyć katalogu tymczasowego! Czy masz pozwolenia do odczytu/zapisu plików? Jeżeli ten błąd pojawia się ponownie spróbuj uruchomić program jako administrator.
 error-invalid-directory-title = Nieprawidłowy katalog
@@ -81,7 +81,7 @@ copy-choose-file = Podwójnie kliknij plik do skopiowania.
 logs-description = Dziennik pokazuję wydajność programu. Jeżeli występują jakieś błędy, tutaj one się pojawią.
 swap-with = Podwójnie naciśnij plik aby zamienić zasoby z "{ $asset }"
 swap-choose-file = Podwójnie naciśnij plik do zamienienia
-clear-cache-description = Jeżeli wyświetlanie lub wyodrębnianie plików zajmuje za długo, możesz wyczyścić pamięć podręczną gry Roblox. Usunie to wszystkie pliki z pamięci podręcznej i gra Roblox wygeneruje pliki, kiedy są wymagane.
+clear-cache-description = Jeżeli wyświetlanie lub wyodrębnianie plików zajmuje za długo, możesz wyczyścić pamięć podręczną gry Roblox. Usunie to wszystkie pliki z pamięci podręcznej i gra wygeneruje pliki, kiedy są wymagane.
 extract-all-description = Ten przycisk skopiuje wszystkie zasoby i stworzy katalogi np. /sounds, /images aby je kategoryzować. Możesz zmienić folder do wypakowania przed startem.
 custom-cache-dir-description = Jeżeli potrzebujesz dostęp do pamięci potrzebnej innej instalacji gry Roblox, możesz zmienić katalog pamięci podręcznej poniżej, a możesz ustawić go z powrotem do domyślnego ustawienia klikając inny przycisk.
 use-alias-description = Zamiast eksportowania zwykłej nazwy dla zasobu, zaznaczenie tej opcji wyeksportuje zasób z inną nazwą pliku. Możesz zrobić to w tej aplikacji.

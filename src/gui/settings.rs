@@ -52,7 +52,7 @@ pub fn actions(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentResource>>) {
     
             // If the user provides a directory, the program will extract the assets to that directory
             if let Some(path) = option_path {
-                logic::extract_all( path.to_string_lossy().to_string(), false, config::get_config_bool("use_alias").unwrap_or(false))
+                logic::extract_all( path, false, config::get_config_bool("use_alias").unwrap_or(false))
             }
         }
     }
@@ -63,7 +63,7 @@ pub fn cache_dir_management(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentR
     ui.label(locale::get_message(locale, "custom-cache-dir-description", None));
 
     let mut args = FluentArgs::new();
-    args.set("directory", logic::get_cache_directory());
+    args.set("directory", logic::get_cache_directory().to_string_lossy().to_string());
 
     ui.label(locale::get_message(locale, "cache-directory", Some(&args)));
 

@@ -2,16 +2,18 @@
 [🇬🇧 English](/docs/en-GB/README.md) |
 *Can you speak English and any other language? Help translate by creating a pull request!*
 
-[![Download for Windows](https://img.shields.io/github/downloads/AeEn123/Roblox-assets-extractor/latest/Roblox-assets-extractor-windows.exe?label=Download&color=blue&style=for-the-badge)](https://github.com/AeEn123/Roblox-assets-extractor/releases/latest/download/Roblox-assets-extractor-windows.exe)
-[![Download for Linux](https://img.shields.io/github/downloads/AeEn123/Roblox-assets-extractor/latest/Roblox-assets-extractor-linux?label=Download&style=for-the-badge)](https://github.com/AeEn123/Roblox-assets-extractor/releases/latest/download/Roblox-assets-extractor-linux)
-[![Website](https://img.shields.io/badge/Website-red?logo=googlechrome&style=for-the-badge)](https://aeen123.github.io/Roblox-assets-extractor/)
+[![Download for Windows](https://img.shields.io/github/downloads/AeEn123/RoExtract/latest/RoExtract-windows.exe?label=Download&color=blue&style=for-the-badge)](https://github.com/AeEn123/RoExtract/releases/latest/download/RoExtract-windows.exe)
+[![Download for Linux](https://img.shields.io/github/downloads/AeEn123/RoExtract/latest/RoExtract-linux?label=Download&style=for-the-badge)](https://github.com/AeEn123/RoExtract/releases/latest/download/RoExtract-linux)
+[![Website](https://img.shields.io/badge/Website-red?logo=googlechrome&style=for-the-badge)](https://aeen123.github.io/RoExtract/)
 
-[![Build and Release](https://github.com/AeEn123/Roblox-assets-extractor/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/AeEn123/Roblox-assets-extractor/actions/workflows/build-and-release.yml)
+[![Build and Release](https://github.com/AeEn123/RoExtract/actions/workflows/build-and-release.yml/badge.svg)](https://github.com/AeEn123/RoExtract/actions/workflows/build-and-release.yml)
 [![Discord invite](https://img.shields.io/discord/470242481582243860?label=Discord)](https://discord.gg/xqNA5jt6DN)
-![Total downloads](https://img.shields.io/github/downloads/AeEn123/Roblox-assets-extractor/total?label=Total%20Downloads)
+![Total downloads](https://img.shields.io/github/downloads/AeEn123/RoExtract/total?label=Total%20Downloads)
 
+# Disclaimer
+This is an independent educational project. RoExtract is **NOT** affiliated with Roblox Corporation in any way.
 
-# Roblox Assets Extractor
+# RoExtract
 This tool extracts cached data from your Roblox installation by looking at the headers of cached files.
 
 ![Screenshot](/assets/screenshot.png)
@@ -24,7 +26,7 @@ Install [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us
 No, it is opening files that your client has already created. You can see them yourself in %Temp%\Roblox
 
 ### Is this malware?
-No, this is not malware, similar to other Free and Open Source Software, the code is available for everyone to see. It would be impossible for us to hide malware in here. The builds are also safe as the builds are now created by GitHub actions meaning everything is fully transparent. If you still don't trust this software, you can use the web demo at https://aeen123.github.io/Roblox-assets-extractor/demo (you don't need to download anything for that)
+No, this is not malware, similar to other Free and Open Source Software, the code is available for everyone to see. It would be impossible for us to hide malware in here. The builds are also safe as the builds are now created by GitHub actions meaning everything is fully transparent. If you still don't trust this software, you can use the web demo at https://aeen123.github.io/RoExtract/demo (you don't need to download anything for that)
 
 ### Windows says "Windows protected your PC" What do I do?
 If Windows detects a program from an unverified publisher, this popup will appear. If this popup does appear, click "More info" and click "Run anyway".
@@ -33,10 +35,10 @@ If Windows detects a program from an unverified publisher, this popup will appea
 No, unlike cheats, this **does not** inject into roblox. Making this an anti-cheat friendly way of extracting assets.
 
 ### My extracted assets don’t play in my media player, what can I do?
-Some media players may not support the format that the file is in. If that is the case, please try another media player that supports all of the formats this supports, e.g VLC. **If the file is really broken, please [create an issue.](https://github.com/AeEn123/Roblox-assets-extractor/issues)**
+Some media players may not support the format that the file is in. If that is the case, please try another media player that supports all of the formats this supports, e.g VLC. **If the file is really broken, please [create an issue.](https://github.com/AeEn123/RoExtract/issues)**
 
 ### Why is KTX files in a different tab? Shouldn't it be in the Textures tab?
-Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatability issues, this tab should be used for more advanced users.
+Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatibility issues, this tab should be used for more advanced users.
 
 ### Why are RBXM files just an "Instance" in Roblox Studio?
 Roblox Studio doesn't have support for cached RBXM files. These files may contain data from games, but we haven't looked into it yet.
@@ -46,7 +48,7 @@ Your Roblox cache itself does take up storage overtime, this tool itself does no
 
 # Usage
 ## Tabs
-You can see multiple tabs. Roblox Assets Extractor catagorises the files into multiple catagories. You can filter them by clicking on the tab.
+You can see multiple tabs. RoExtract catagorises the files into multiple catagories. You can filter them by clicking on the tab.
 ## The toolbar
 Each item in the toolbar allows you to do different operations with the directory or the asset, you can also access the toolbar as a context menu by right clicking. You can disable the toolbar at the top of the screen in the settings, **Enable toolbar** under the **Behaviour** section.
 ## Keyboard navigation and shortcuts
@@ -70,18 +72,18 @@ We would greatly welcome a pull request for a flatpak.
 You can install on Arch Linux by using the PKGBUILD located in `packages/arch`
 An example installation script:
 ```bash
-mkdir /tmp/Roblox-assets-extractor
-cd /tmp/Roblox-assets-extractor
-wget raw.githubusercontent.com/AeEn123/Roblox-assets-extractor/refs/heads/main/packages/arch/PKGBUILD
+mkdir /tmp/RoExtract
+cd /tmp/RoExtract
+wget raw.githubusercontent.com/AeEn123/RoExtract/refs/heads/main/packages/arch/PKGBUILD
 makepkg -si
 ```
 ## Other distros
 Other distros will hopefully be supported soon. If you know how to make one and want it merged in this project, create a pull request!
 
 # Testing development builds
-The development builds can be downloaded from the [releases](https://github.com/AeEn123/Roblox-assets-extractor/releases) page.
+The development builds can be downloaded from the [releases](https://github.com/AeEn123/RoExtract/releases) page.
 
-If you already have the latest development build of Roblox Assets Extractor installed, you can enable development builds in settings 
+If you already have the latest development build of RoExtract installed, you can enable development builds in settings 
 # More Info
 This is my first project written in rust/egui so bugs may appear, in the circumstance that a bug does appear, report an issue and use the legacy python version if the bug makes it unusable.
 
@@ -97,8 +99,8 @@ Building from source requires cargo, [which can be installed from rustup.](https
 
 ## 1. Clone the repository
 ```bash
-git clone https://github.com/AeEn123/Roblox-assets-extractor
-cd Roblox-assets-extractor
+git clone https://github.com/AeEn123/RoExtract
+cd RoExtract
 ```
 ## 2. Build with cargo, the command you run depends on your use-case
 If you want a finished build which runs fast but compiles slowly (recommended for normal use)
@@ -114,7 +116,3 @@ Wait for it to build all the dependencies and the application. After that you sh
 
 # Python version
 See [python.md](/docs/en-GB/python.md)
-
-# Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=AeEn123/Roblox-assets-extractor&type=Date)](https://www.star-history.com/#AeEn123/Roblox-assets-extractor&Date)

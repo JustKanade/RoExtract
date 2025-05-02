@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: windows-bin
-          path: target/release/Roblox-assets-extractor.exe
+          path: target/release/RoExtract.exe
 
   linux-build:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: linux-bin
-          path: target/release/Roblox-assets-extractor
+          path: target/release/RoExtract
 
   create-release:
     needs: [windows-build, linux-build]
@@ -72,8 +72,8 @@ jobs:
 
       - name: Rename binaries
         run: |
-          mv artifacts/windows/Roblox-assets-extractor.exe artifacts/windows/Roblox-assets-extractor-windows.exe
-          mv artifacts/linux/Roblox-assets-extractor artifacts/linux/Roblox-assets-extractor-linux
+          mv artifacts/windows/RoExtract.exe artifacts/windows/RoExtract-windows.exe
+          mv artifacts/linux/RoExtract artifacts/linux/RoExtract-linux
 
       - name: Create Pre-Release
         uses: softprops/action-gh-release@v1
@@ -81,10 +81,10 @@ jobs:
           tag_name: dev-build-${{ github.run_id }}
           name: "Development Build (${{ steps.date.outputs.date }})"
           body: |
-            Development preview build - Bugs may appear, if you are looking to just use the software, use the [latest stable release](https://github.com/AeEn123/Roblox-assets-extractor/releases/latest)
+            Development preview build - Bugs may appear, if you are looking to just use the software, use the [latest stable release](https://github.com/AeEn123/RoExtract/releases/latest)
             - Commit: [${{ github.sha }}](https://github.com/${{ github.repository }}/commit/${{ github.sha }})
             - Build date: ${{ steps.date.outputs.date }}
           prerelease: true
           files: |
-            artifacts/windows/Roblox-assets-extractor-windows.exe
-            artifacts/linux/Roblox-assets-extractor-linux
+            artifacts/windows/RoExtract-windows.exe
+            artifacts/linux/RoExtract-linux

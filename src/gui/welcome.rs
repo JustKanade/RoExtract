@@ -65,7 +65,7 @@ pub fn run_gui() -> eframe::Result {
     };
     
     eframe::run_native(
-        &format!("Roblox Assets Extractor v{VERSION}").to_owned(),
+        &format!("RoExtract v{VERSION}").to_owned(),
         options,
         Box::new(|cc| Ok(Box::new(MyApp::new(cc)))),
     )

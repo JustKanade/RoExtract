@@ -208,14 +208,14 @@ def update():
 
     if requestsInstalled:
         # Check for updates
-        r = get("https://raw.githubusercontent.com/AeEn123/Roblox-assets-extractor/main/version.txt")
+        r = get("https://raw.githubusercontent.com/AeEn123/RoExtract/main/version.txt")
         newver = float(r.text.strip())
 
         # Update diolgue
         if newver > ver:
-            r = get("https://raw.githubusercontent.com/AeEn123/Roblox-assets-extractor/main/latestchangelog.txt", timeout=5)
+            r = get("https://raw.githubusercontent.com/AeEn123/RoExtract/main/latestchangelog.txt", timeout=5)
             if messagebox.askyesno("Update available", r.text + "\n\nDo you want to install the new update?"):
-                r = get("https://raw.githubusercontent.com/AeEn123/Roblox-assets-extractor/main/Roblox%20assets%20extractor.pyw")
+                r = get("https://raw.githubusercontent.com/AeEn123/RoExtract/main/RoExtract-legacy.pyw")
                 with open(__file__, "wb") as f:
                     f.write(r.content)
                 
@@ -245,11 +245,11 @@ else:
 
 # Create window
 root = tk.Tk()
-root.title(f"Roblox assets extractor v{ver}")
+root.title(f"RoExtract v{ver}")
 
 if rust_version:
     
-    yes = messagebox.askyesno("The code has been rewritten", """Roblox Assets Extractor has been rewritten in Rust. Do you want to download the new Rust version?
+    yes = messagebox.askyesno("The code has been rewritten", """RoExtract has been rewritten in Rust. Do you want to download the new Rust version?
 It includes many new features such as:
 + Faster speed
 + New GUI library
@@ -260,7 +260,7 @@ It includes many new features such as:
 
 Note: Clicking yes will open the link to download the new version.""")
     if yes:
-        link = "https://github.com/AeEn123/Roblox-assets-extractor/releases/latest"
+        link = "https://github.com/AeEn123/RoExtract/releases/latest"
         if os.name == "nt":
             subprocess.Popen(["explorer", link])
         else:

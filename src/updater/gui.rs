@@ -71,7 +71,7 @@ impl eframe::App for App {
 
 pub fn run_gui(json: updater::Release, url: String) -> eframe::Result {
     eframe::run_native(
-        &format!("Roblox Assets Extractor Updater v{}", VERSION),
+        &format!("RoExtract Updater v{}", VERSION),
         eframe::NativeOptions::default(),
         Box::new(move |cc| {
             cc.egui_ctx.style_mut(|style| {

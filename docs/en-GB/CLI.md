@@ -11,7 +11,7 @@ This mode is useful when you want to use the tool remotely (no display) and/or y
 ## --help
 ### Usage:
 ```
-./Roblox-assets-extractor --help <command>
+./RoExtract --help <command>
 ```
 ### Description:
 Outputs a help page showing a list of commands
@@ -22,7 +22,7 @@ When `<command>` is provided, it will show help for that commands.
 ## --list
 ### Usage:
 ```
-./Roblox-assets-extractor --list <catagory>
+./RoExtract --list <catagory>
 ```
 ### Description:
 Will list files within that catagory.
