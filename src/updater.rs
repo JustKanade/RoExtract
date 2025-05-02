@@ -1,4 +1,4 @@
-use std::{fs, path::PathBuf, sync::Mutex};
+use std::{ffi::OsString, fs, path::PathBuf, sync::Mutex};
 
 use reqwest::blocking::Client;
 use serde::Deserialize;
@@ -172,6 +172,7 @@ pub fn run_install_script(run_afterwards: bool) -> bool {
     
                 let program_path = std::env::current_exe().unwrap();
                 
+
                 #[cfg(target_family = "unix")]
                 if run_afterwards {
                     command.args([install_script, update_file, program_path.clone(), program_path]).spawn().expect("failed to start update script");
