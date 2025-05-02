@@ -97,7 +97,7 @@ fn save_install_script() -> PathBuf {
 #[cfg(target_os = "windows")]
 fn save_install_script() -> PathBuf {
     let temp_dir = logic::get_temp_dir(false);
-    temp_dir.join("installer.bat");
+    let path = temp_dir.join("installer.bat");
 
     if temp_dir != "" {
         match fs::write(&path, include_str!("installer/installer.bat")) {
