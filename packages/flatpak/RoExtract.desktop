@@ -2,8 +2,11 @@
 [Desktop Entry]
 Type=Application
 Name=RoExtract
+GenericName=Roblox Assets Extractor
 Comment=A safe way to extract assets from your Roblox installation.
-Categories=Utility
-Exec=/usr/bin/flatpak run --arch=x86_64 --file-forwarding com.github.AeEn123.RoExtract
+Comment[de]=Ein sicherer Weg um Assets von deiner Roblox Installation zu extrahieren.
+Categories=Utility;Game
+Keyword=roblox;asset;extractor
+Exec=
 Icon=com.github.AeEn123.RoExtract
 Terminal=false
