@@ -26,7 +26,6 @@ modules:
         path: RoExtract-system.json
 
 finish-args:
-  - --socket=fallback-x11
-  - --socket=wayland
-  - --filesystem=xdg-documents
+  - --socket=x11
+  - --device=dri
   - --filesystem=~/.var/app/org.vinegarhq.Sober/cache:create
