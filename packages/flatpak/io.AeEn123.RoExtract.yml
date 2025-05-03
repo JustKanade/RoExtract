@@ -1,0 +1,28 @@
+id: io.AeEn123.RoExtract
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: roextract
+modules:
+  - name: roextract
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 RoExtract.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      - install -Dm755 Roblox-assets-extractor-linux ${FLATPAK_DEST}/bin/roextract
+    sources:
+      - type: file
+        url: https://github.com/AeEn123/RoExtract/releases/download/v0.1.4/Roblox-assets-extractor-linux
+        sha256: 58fcd2681817f97ea42f72e46a372f786ebf1c8079cca511d1de2780817414d6
+
+      - type: file
+        path: RoExtract.desktop
+
+      - type: file
+        path: icon.svg
+
+finish-args:
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --filesystem=xdg-documents
+  - --filesystem=~/.var/app/org.vinegarhq.Sober/cache
