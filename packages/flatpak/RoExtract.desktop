@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=RoExtract
+Comment=A safe way to extract assets from your Roblox installation.
+Categories=Utility
+Exec=/usr/bin/flatpak run --arch=x86_64 --file-forwarding com.github.AeEn123.RoExtract
+Icon=com.github.AeEn123.RoExtract
+Terminal=false

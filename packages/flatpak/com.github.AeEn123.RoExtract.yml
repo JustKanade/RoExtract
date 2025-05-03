@@ -1,0 +1,32 @@
+id: com.github.AeEn123.RoExtract
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: roextract
+modules:
+  - name: roextract
+    buildsystem: simple
+    build-commands:
+      - install -Dm644 RoExtract.desktop ${FLATPAK_DEST}/share/applications/${FLATPAK_ID}.desktop
+      - install -Dm644 RoExtract-icon.svg ${FLATPAK_DEST}/share/icons/hicolor/scalable/apps/${FLATPAK_ID}.svg
+      - install -Dm755 RoExtract-linux ${FLATPAK_DEST}/bin/roextract
+      - install -Dm644 RoExtract-system.json ${FLATPAK_DEST}/bin/RoExtract-system.json
+    sources:
+      - type: file
+        url: https://github.com/AeEn123/RoExtract/releases/download/dev-build-14802577534/RoExtract-linux
+        sha256: fe448d152e86be9acbb0ff90c503df0f1097402c3bc22c97d15770394e80fb2e
+
+      - type: file
+        path: RoExtract.desktop
+
+      - type: file
+        path: RoExtract-icon.svg
+
+      - type: file
+        path: RoExtract-system.json
+
+finish-args:
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --filesystem=xdg-documents
+  - --filesystem=~/.var/app/org.vinegarhq.Sober/cache:create
