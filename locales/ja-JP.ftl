@@ -114,3 +114,4 @@ button-disable-display-image-preview = Stop displaying image previews # TODO: Tr
 generic-error-critical = Critical error # TODO: Translate
 download-development-build = Use development builds to get the latest features early (These builds may be unstable) # TODO: Translate
 setting-below-restart-required = Note: Changing the setting below requires restarting the program for it to apply. # TODO: Translate
+checkbox-hide-user-logs = Hide username from logs # TODO: Translate
