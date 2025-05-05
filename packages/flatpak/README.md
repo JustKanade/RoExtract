@@ -1,7 +1,7 @@
 ### Building Flatpak package
 # Building and installing
 1. Download everything inside packages/flatpak
-2. Make sure youŕe running the command below in the folder with the files
+2. Make sure you're running the command below in the folder with the files
 ```
 flatpak-builder --force-clean --user --install-deps-from=flathub --repo=repo --install builddir com.github.AeEn123.RoExtract.yml
 ```
