@@ -123,3 +123,5 @@ button-disable-display-image-preview = Bildervorschau nicht mehr anzeigen
 generic-error-critical = Kritischer Fehler
 download-development-build = Benutze Entwicklungsversionen um die neusten Funktionen früher zu bekommen (Diese Versionen können nicht stabil sein)
 setting-below-restart-required = Info: Ändern der unteren Einstellung benötigt ein Neustart des Programmes, damit es angewendet wird
+
+checkbox-hide-user-logs = Hide username from logs # TODO: Translate

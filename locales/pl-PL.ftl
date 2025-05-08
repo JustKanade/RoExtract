@@ -67,6 +67,7 @@ dependencies = Zależności
 behavior = Zachowanie
 
 # Checkboxes
+checkbox-hide-user-logs = Hide username from logs # TODO: Translate
 download-development-build = Use development builds to get the latest features early (These builds may be unstable) # TODO: Translate
 refresh-before-extract = Odśwież listę plików przed wyodrębnieniem
 use-topbar-buttons = Włącz pasek narzędzi

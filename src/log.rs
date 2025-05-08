@@ -33,11 +33,11 @@ pub fn error(message: &str) {
 pub fn critical_error(message: &str) {
     log("CRITICAL: ", message);
 
-    let _ = native_dialog::MessageDialog::new()
-    .set_type(native_dialog::MessageType::Error)
+    let _ = native_dialog::DialogBuilder::message()
+    .set_level(native_dialog::MessageLevel::Error)
     .set_title(&locale::get_message(&locale::get_locale(None), "generic-error-critical", None))
     .set_text(message)
-    .show_alert();
+    .alert().show();
 }
 
 pub fn get_logs() -> String {

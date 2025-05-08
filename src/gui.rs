@@ -1,7 +1,7 @@
 // Used for gui
 use eframe::egui;
 use egui::Color32;
-use native_dialog::{MessageDialog, FileDialog, MessageType};
+use native_dialog::{DialogBuilder, MessageLevel};
 use egui_dock::{DockArea, NodeIndex, DockState, SurfaceIndex, Style};
 use fluent_bundle::{FluentBundle, FluentResource};
 use std::num::NonZero;
@@ -85,7 +85,10 @@ fn double_click(dir: PathBuf, value: String, mode: String, swapping: &mut bool, 
         let origin = dir.join(value);
         let new_destination = logic::extract_file(origin, &mode, destination.clone(), true);
         if new_destination != PathBuf::new() {
-            let _ = open::that(new_destination); // Open when finished
+            let result = open::that(new_destination);
+            if result.is_err() {
+                log::error(&format!("Failed opening file: {}", result.unwrap_err()));
+            }
         }
     }
 }
@@ -93,11 +96,11 @@ fn double_click(dir: PathBuf, value: String, mode: String, swapping: &mut bool, 
 
 fn delete_this_directory(cache_directory: PathBuf, locale: &FluentBundle<Arc<FluentResource>>) {
     // Confirmation dialog
-    let yes = MessageDialog::new()
-    .set_type(MessageType::Info)
+    let yes = DialogBuilder::message()
+    .set_level(MessageLevel::Info)
     .set_title(&locale::get_message(locale, "confirmation-delete-confirmation-title", None))
     .set_text(&locale::get_message(locale, "confirmation-delete-confirmation-description", None))
-    .show_confirm()
+    .confirm().show()
     .unwrap();
 
     if yes {
@@ -111,18 +114,18 @@ fn extract_all_of_type(cache_directory: PathBuf, mode: &str, locale: &FluentBund
     // Confirmation dialog, the program is still listing files
     if no {
         // NOT result, will become false if user clicks yes
-        no = !MessageDialog::new()
-        .set_type(MessageType::Info)
+        no = !DialogBuilder::message()
+        .set_level(MessageLevel::Info)
         .set_title(&locale::get_message(locale, "confirmation-filter-confirmation-title", None))
         .set_text(&locale::get_message(locale, "confirmation-filter-confirmation-description", None))
-        .show_confirm()
+        .confirm().show()
         .unwrap();
     }
 
     // The user either agreed or the program is not listing files
     if !no {
-        let option_path = FileDialog::new()
-        .show_open_single_dir()
+        let option_path = DialogBuilder::file()
+        .open_single_dir().show()
         .unwrap();
 
         // If the user provides a directory, the program will extract the assets to that directory
@@ -135,11 +138,11 @@ fn toggle_swap(swapping: &mut bool, swapping_asset_a: &mut Option<String>, local
     let mut warning_acknoledged = config::get_config_bool("ban-warning-ack").unwrap_or(false);
 
     if !warning_acknoledged {
-        warning_acknoledged = MessageDialog::new()
-        .set_type(MessageType::Info)
+        warning_acknoledged = DialogBuilder::message()
+        .set_level(MessageLevel::Info)
         .set_title(&locale::get_message(locale, "confirmation-ban-warning-title", None))
         .set_text(&locale::get_message(locale, "confirmation-ban-warning-description", None))
-        .show_confirm()
+        .confirm().show()
         .unwrap();
     }
 
@@ -156,7 +159,7 @@ fn toggle_swap(swapping: &mut bool, swapping_asset_a: &mut Option<String>, local
 fn extract_file_button(name: &str, cache_directory: PathBuf, tab: &str) {
     let alias = config::get_asset_alias(name);
     let origin = cache_directory.join(name);
-    if let Some(destination) = native_dialog::FileDialog::new().set_filename(&alias).show_save_single_file().unwrap() {
+    if let Some(destination) = native_dialog::DialogBuilder::file().set_filename(&alias).save_single_file().show().unwrap() {
         logic::extract_file(origin, tab.into(), destination, false);
     }
 }
@@ -831,8 +834,8 @@ impl egui_dock::TabViewer for TabViewer<'_> {
                     ui.ctx().copy_text(logs.clone());
                 }
                 if ui.button(locale::get_message(&self.locale, "button-export-logs", None)).clicked() {
-                    if let Some(path) = FileDialog::new()
-                        .show_save_single_file()
+                    if let Some(path) = DialogBuilder::file()
+                        .save_single_file().show()
                         .unwrap()
                     {
                         if let Err(e) = std::fs::write(path, logs.clone()) {

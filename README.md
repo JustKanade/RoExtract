@@ -38,7 +38,7 @@ No, unlike cheats, this **does not** inject into roblox. Making this an anti-che
 Some media players may not support the format that the file is in. If that is the case, please try another media player that supports all of the formats this supports, e.g VLC. **If the file is really broken, please [create an issue.](https://github.com/AeEn123/RoExtract/issues)**
 
 ### Why is KTX files in a different tab? Shouldn't it be in the Textures tab?
-Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatibility issues, this tab should be used for more advanced users.
+Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatability issues, this tab should be used for more advanced users.
 
 ### Why are RBXM files just an "Instance" in Roblox Studio?
 Roblox Studio doesn't have support for cached RBXM files. These files may contain data from games, but we haven't looked into it yet.
@@ -66,8 +66,11 @@ See [CLI.md](/docs/en-GB/CLI.md)
 The program only comes portable on Windows for now, this may change in the future
 
 # Installing for Linux
-Installing for Linux varies for each distro. We hope we can eventually create a flatpak for universal installation.
-We would greatly welcome a pull request for a flatpak.
+## Flatpak (VERY EXPERIMENTAL)
+> [!WARNING]
+> Flatpak support is VERY EXPERIMENTAL, use at your own risk.
+There are currently no prebuilt flatpak packages, follow the [build guide](packages/flatpak/README.md) for instructions on building the flatpak package
+
 ## Arch Linux
 You can install on Arch Linux by using the PKGBUILD located in `packages/arch`
 An example installation script:

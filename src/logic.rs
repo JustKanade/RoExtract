@@ -267,22 +267,22 @@ pub fn detect_directory() -> PathBuf {
     }
 
     // If it was unable to detect any directory, tell the user
-    let _ = native_dialog::MessageDialog::new()
-    .set_type(native_dialog::MessageType::Error)
+    let _ = native_dialog::DialogBuilder::message()
+    .set_level(native_dialog::MessageLevel::Error)
     .set_title(&locale::get_message(&locale::get_locale(None), "error-directory-detection-title", None))
     .set_text(&locale::get_message(&locale::get_locale(None), "error-directory-detection-description", None))
-    .show_alert();
+    .alert().show();
 
-    let yes = native_dialog::MessageDialog::new()
-    .set_type(native_dialog::MessageType::Error)
+    let yes = native_dialog::DialogBuilder::message()
+    .set_level(native_dialog::MessageLevel::Error)
     .set_title(&locale::get_message(&locale::get_locale(None), "confirmation-custom-directory-title", None))
     .set_text(&locale::get_message(&locale::get_locale(None), "confirmation-custom-directory-description", None))
-    .show_confirm()
+    .confirm().show()
     .unwrap();
 
     if yes {
-        let option_path = native_dialog::FileDialog::new()
-        .show_open_single_dir()
+        let option_path = native_dialog::DialogBuilder::file()
+        .open_single_dir().show()
         .unwrap();
         if let Some(path) = option_path {
             config::set_config_value("cache_directory", validate_directory(&path.to_string_lossy().to_string()).unwrap().into());
@@ -309,11 +309,11 @@ pub fn get_temp_dir(create_directory: bool) -> PathBuf {
             }
             Err(e) => {
                 // Have a visual dialog to show the user what actually went wrong
-                let _ = native_dialog::MessageDialog::new()
-                .set_type(native_dialog::MessageType::Error)
+                let _ = native_dialog::DialogBuilder::message()
+                .set_level(native_dialog::MessageLevel::Error)
                 .set_title(&locale::get_message(&locale::get_locale(None), "error-temporary-directory-title", None))
                 .set_text(&locale::get_message(&locale::get_locale(None), "error-temporary-directory-description", None))
-                .show_alert();
+                .alert().show();
                 panic!("Failed to create a temporary directory! {}", e)
             }
         }

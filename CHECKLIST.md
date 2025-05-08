@@ -37,8 +37,6 @@
 
 ### Changelog for 1.0.0
 Name: The actually major update
-# File list
-The file list has seen major improvements, now having a table-like layout.
 # Images tab
 Major improvements are made to the images tab, allowing you to preview the images within the application
 The images will appear in a grid-like interface just like any file manager.
