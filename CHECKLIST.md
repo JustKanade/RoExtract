@@ -32,8 +32,8 @@
 - [x] - image decoder to quickly preview assets
 - [x] - Use versioning numbers better major.minor.patch
 - [ ] - Fix CLI mode
-- [ ] - Make it into a table with specific details e.g size, type, time created
-- [ ] - Wait for translations
+- [ ] - Test if all builds work
+
 
 ### Changelog for 1.0.0
 Name: The actually major update
@@ -61,6 +61,8 @@ You can now test development builds within the settings
 
 ## 1.1.0
 - [ ] - Built-in media player to quickly preview sounds
+- [ ] - Make it into a table with specific details e.g size, type, time created
+- [ ] - Wait for translations
 
 ## Future releases
 - [ ] - Finish CLI mode documentation
