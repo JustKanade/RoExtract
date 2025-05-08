@@ -22,26 +22,26 @@ impl MyApp {
 impl eframe::App for MyApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.heading(locale::get_message(&self.locale, "welcome", None));
+            egui::ScrollArea::both().show(ui, | ui| {
+                ui.heading(locale::get_message(&self.locale, "welcome", None));
 
-            if settings::language(ui, &self.locale) {
-                // This returns true if the locales need to be refreshed
-                self.locale = locale::get_locale(None);
-            }
-            settings::behavior(ui, &self.locale);
-            settings::updates(ui, &self.locale);
-            if self.first_frame {
-                config::set_config_value("welcomed", false.into());
-                self.first_frame = false
-            }
-
-
-            if ui.button(locale::get_message(&self.locale, "button-finish", None)).clicked() {
-                config::set_config_value("welcomed", true.into());
-                ctx.send_viewport_cmd(egui::ViewportCommand::Close);
-            }
-
-
+                if settings::language(ui, &self.locale) {
+                    // This returns true if the locales need to be refreshed
+                    self.locale = locale::get_locale(None);
+                }
+                settings::behavior(ui, &self.locale);
+                settings::updates(ui, &self.locale);
+                if self.first_frame {
+                    config::set_config_value("welcomed", false.into());
+                    self.first_frame = false
+                }
+    
+    
+                if ui.button(locale::get_message(&self.locale, "button-finish", None)).clicked() {
+                    config::set_config_value("welcomed", true.into());
+                    ctx.send_viewport_cmd(egui::ViewportCommand::Close);
+                }
+            });
         });
     }
 }

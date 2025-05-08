@@ -1,7 +1,7 @@
 use crate::{config, locale, logic};
 use std::sync::Arc;
 use fluent_bundle::{FluentBundle, FluentResource, FluentArgs};
-use native_dialog::{MessageDialog, FileDialog, MessageType};
+use native_dialog::{DialogBuilder, MessageLevel};
 
 
 pub fn actions(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentResource>>) {
@@ -14,11 +14,11 @@ pub fn actions(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentResource>>) {
     // Clear cache button
     if ui.button(locale::get_message(locale, "button-clear-cache", None)).clicked() || ui.input(|i| i.key_pressed(egui::Key::Delete)) {
         // Confirmation dialog
-        let yes = MessageDialog::new()
-        .set_type(MessageType::Info)
+        let yes = DialogBuilder::message()
+        .set_level(MessageLevel::Info)
         .set_title(&locale::get_message(locale, "confirmation-clear-cache-title", None))
         .set_text(&locale::get_message(locale, "confirmation-clear-cache-description", None))
-        .show_confirm()
+        .confirm().show()
         .unwrap();
 
         if yes {
@@ -36,18 +36,19 @@ pub fn actions(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentResource>>) {
         // Confirmation dialog, the program is still listing files
         if no {
             // NOT result, will become false if user clicks yes
-            no = !MessageDialog::new()
-            .set_type(MessageType::Info)
+            no = !DialogBuilder::message()
+            .set_level(MessageLevel::Info)
             .set_title(&locale::get_message(locale, "confirmation-filter-confirmation-title", None))
             .set_text(&locale::get_message(locale, "confirmation-filter-confirmation-description", None))
-            .show_confirm()
+            .confirm().show()
             .unwrap();
         }
     
         // The user either agreed or the program is not listing files
         if !no {
-            let option_path = FileDialog::new()
-            .show_open_single_dir()
+            let option_path = DialogBuilder::file()
+            .open_single_dir()
+            .show()
             .unwrap();
     
             // If the user provides a directory, the program will extract the assets to that directory
@@ -69,8 +70,8 @@ pub fn cache_dir_management(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentR
 
     ui.horizontal(|ui| {
         if ui.button(locale::get_message(locale, "button-change-cache-dir", None)).clicked() {
-            let option_path = FileDialog::new()
-            .show_open_single_dir()
+            let option_path = DialogBuilder::file()
+            .open_single_dir().show()
             .unwrap();
     
             // If the user provides a directory, the program will change the cache directory to the new one
@@ -82,11 +83,11 @@ pub fn cache_dir_management(ui: &mut egui::Ui, locale: &FluentBundle<Arc<FluentR
                         logic::set_cache_directory(logic::detect_directory()); // Set directory to new one
                     }
                     Err(_) => {
-                        MessageDialog::new()
-                        .set_type(MessageType::Info)
+                        DialogBuilder::message()
+                        .set_level(MessageLevel::Info)
                         .set_title(&locale::get_message(locale, "error-invalid-directory-title", None))
                         .set_text(&locale::get_message(locale, "error-invalid-directory-description", None))
-                        .show_alert()
+                        .alert().show()
                         .unwrap();
                     }
                 }
