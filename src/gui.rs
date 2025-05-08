@@ -85,7 +85,10 @@ fn double_click(dir: PathBuf, value: String, mode: String, swapping: &mut bool, 
         let origin = dir.join(value);
         let new_destination = logic::extract_file(origin, &mode, destination.clone(), true);
         if new_destination != PathBuf::new() {
-            let _ = open::that(new_destination); // Open when finished
+            let result = open::that(new_destination);
+            if result.is_err() {
+                log::error(&format!("Failed opening file: {}", result.unwrap_err()));
+            }
         }
     }
 }
