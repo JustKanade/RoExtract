@@ -514,7 +514,7 @@ pub fn refresh(dir: PathBuf, mode: String, cli_list_mode: bool, yield_for_thread
                             if header != "" {
                                 // Add it to the list if the header is inside of the file.
                                 if bytes_contains(&buffer, header.as_bytes()) {                                        
-                                    update_file_list(create_asset_info(&path, &filename.to_string_lossy()), false);
+                                    update_file_list(create_asset_info(&path, &filename.to_string_lossy()), cli_list_mode);
                                 }
                             }
                         }    
