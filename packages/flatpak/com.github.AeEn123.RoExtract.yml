@@ -13,8 +13,8 @@ modules:
       - install -Dm644 RoExtract-system.json ${FLATPAK_DEST}/bin/RoExtract-system.json
     sources:
       - type: file
-        url: https://github.com/AeEn123/RoExtract/releases/download/dev-build-14842786623/RoExtract-linux
-        sha256: 00dc22406472a28524ecb28172fa207df22cdc0c1c6aa5eabe88b32cb899b503
+        url: https://github.com/AeEn123/RoExtract/releases/download/dev-build-14904398232/RoExtract-linux
+        sha256: eb36aaf36e5bb30096b5535e8d0f994da84ff0ff6be581171626f52944ad4b03
 
       - type: file
         path: RoExtract.desktop
@@ -30,3 +30,5 @@ finish-args:
   - --socket=x11
   - --device=dri
   - --filesystem=~/.var/app/org.vinegarhq.Sober/cache:create
+  - --filesystem=host  # Allows access to the host file system
+  - --talk-name=org.freedesktop.portal.Desktop  # Enables access to the desktop 
