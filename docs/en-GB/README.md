@@ -14,6 +14,19 @@ This tool extracts cached data from your Roblox installation by looking at the h
 
 ![Screenshot](/assets/screenshot.png)
 
+# RoExtract? And the disclaimer? And the repo was suspended? What happened?
+So recently the repo was suspended due to trademark violation.
+
+I managed to get it back, GitHub support wanted a disclaimer. (thank you GitHub support, still a good support team out there)
+
+The disclaimer was added to the site and readme, to ensure it complies.
+
+I also rebranded the project to RoExtract to avoid further trademark concerns, since the previous name had "Roblox" in the name.
+
+The rebrand has broken a few links, but we are cleaning it up.
+
+Thank you for your support in this project :), it felt like I lost almost everything when I lost this repo.
+
 # FAQ
 ### The program can't run because VCRUNTIME140.dll is missing 
 Install [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist)
@@ -34,7 +47,7 @@ No, unlike cheats, this **does not** inject into roblox. Making this an anti-che
 Some media players may not support the format that the file is in. If that is the case, please try another media player that supports all of the formats this supports, e.g VLC. **If the file is really broken, please [create an issue.](https://github.com/AeEn123/RoExtract/issues)**
 
 ### Why is KTX files in a different tab? Shouldn't it be in the Textures tab?
-Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatability issues, this tab should be used for more advanced users.
+Technically it should, but most image viewers don't support KTX files, so it is best to move this aside to a different tab to avoid compatibility issues, this tab should be used for more advanced users.
 
 ### Why are RBXM files just an "Instance" in Roblox Studio?
 Roblox Studio doesn't have support for cached RBXM files. These files may contain data from games, but we haven't looked into it yet.
@@ -44,7 +57,7 @@ Your Roblox cache itself does take up storage overtime, this tool itself does no
 
 # Usage
 ## Tabs
-You can see multiple tabs. RoExtract catagorises the files into multiple catagories. You can filter them by clicking on the tab.
+You can see multiple tabs. RoExtract categorises the files into multiple categories. You can filter them by clicking on the tab.
 ## The toolbar
 Each item in the toolbar allows you to do different operations with the directory or the asset, you can also access the toolbar as a context menu by right clicking. You can disable the toolbar at the top of the screen in the settings, **Enable toolbar** under the **Behaviour** section.
 ## Keyboard navigation and shortcuts
