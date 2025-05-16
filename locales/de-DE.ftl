@@ -54,7 +54,7 @@ automatically-install-updates = Automatisch Aktualisierungen installieren
 
 # Beschreibungen
 custom-cache-dir-description = Wenn du den Cache in einer anderen Installation zugreifen willst, änder den Cacheordner unten, du kannst ihn mit den anderen Knopf zum Standart zurücksetzen.
-clear-cache-description = Wenn es zu lange brauch um alle Dateien anzuzeigen und zuextrahieren, kannst du deinen Cache mit den Knopf unten löschen. Das Entfernt alle Dateien von deinen Cache und der Client wird sie automatisch neu erstellen wenn benötigt.
+clear-cache-description = Wenn es zu lange dauert alle Dateien anzuzeigen und zuextrahieren, kannst du deinen Cache mit den Knopf unten löschen. Das Entfernt alle Dateien von deinen Cache und der Client wird sie automatisch neu erstellen wenn benötigt.
 extract-all-description = Dieser Knopf unten wird alle Assets kopieren und Ordner für diese erstellen z.B /sounds, /images um diese zu Kategorisieren. Du kannst den Root Ordner beim Starten auswählen.
 
 # Status
@@ -124,4 +124,4 @@ generic-error-critical = Kritischer Fehler
 download-development-build = Benutze Entwicklungsversionen um die neusten Funktionen früher zu bekommen (Diese Versionen können nicht stabil sein)
 setting-below-restart-required = Info: Ändern der unteren Einstellung benötigt ein Neustart des Programmes, damit es angewendet wird
 
-checkbox-hide-user-logs = Hide username from logs # TODO: Translate
+checkbox-hide-user-logs = Verstecke Nutzernamen von Logs
