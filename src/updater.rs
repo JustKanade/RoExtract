@@ -1,4 +1,4 @@
-use std::{fs, path::PathBuf, sync::Mutex};
+use std::{ffi::OsString, fs, path::PathBuf, sync::Mutex};
 
 use reqwest::blocking::Client;
 use serde::Deserialize;
@@ -183,7 +183,7 @@ pub fn run_install_script(run_afterwards: bool) -> bool {
                 #[cfg(target_os = "windows")] // cmd /c
                 if run_afterwards {
                     command.args([
-                        std::ffi::OsString::from("/c"),
+                        OsString::from("/c"),
                         install_script.into_os_string(),
                         update_file.into_os_string(),
                         program_path.clone().into_os_string(),
@@ -191,11 +191,11 @@ pub fn run_install_script(run_afterwards: bool) -> bool {
                     ]);
                 } else {
                     command.args([
-                        std::ffi::OsString::from("/c"),
+                        OsString::from("/c"),
                         install_script.into_os_string(),
                         update_file.into_os_string(),
                         program_path.into_os_string(),
-                        std::ffi::OsString::from("exit"),
+                        OsString::from("exit"),
                     ]);
                 }
     
