@@ -12,7 +12,7 @@ use std::sync::Arc;
 
 use clap::{Parser, ValueEnum};
 
-// CLI stuff
+// CLI definitions
 #[derive(ValueEnum, Clone, Debug)]
 enum Category {
     Music,
@@ -37,16 +37,20 @@ struct Cli {
     list: bool,
 
     /// Set mode, using this is generally recommended, if this is not provided, the program will run the same function across each mode
-    #[arg(short, long, value_name = "CATAGORY")]
+    #[arg(short, long, value_name = "CATEGORY")]
     mode: Option<Category>,
 
     /// Extract asset, extract directory if no asset provided
     #[arg(short, long)]
-    extract: Option<Option<String>>,
+    extract: Option<String>,
 
-    /// Add a file extention automatically
+    /// Extract all assets to directory
     #[arg(long)]
-    extention: bool,
+    extract_all: bool,
+
+    /// Add a file extension automatically
+    #[arg(long)]
+    extension: bool,
 
     /// Define a destination path
     #[arg(short, long)]
@@ -196,7 +200,7 @@ fn configure_fallback_font(ctx: &egui::Context) {
     // Example: fonts.font_data.insert("fallback_chinese".to_owned(), egui::FontData::from_static(include_bytes!("../fonts/chinese_font.ttf")));
     
     // Currently only using system default fonts, but adjusting font configuration for better unicode character display
-    let mut fonts = egui::FontDefinitions::default();
+    let fonts = egui::FontDefinitions::default();
     
     // Ensure default fonts support more unicode characters
     // This may not perfectly display Chinese, but at least won't show boxes
@@ -205,7 +209,7 @@ fn configure_fallback_font(ctx: &egui::Context) {
     println!("Warning: No suitable Chinese font found, Chinese display may be incomplete");
 }
 
-// ======================= Original Functionality Functions =======================
+// ======================= Core Functionality Functions =======================
 
 fn get_tab(category: Category) -> String {
     category.to_string().to_lowercase().replace("ktx","ktx-files").replace("rbxm","rbxm-files")
@@ -216,11 +220,11 @@ fn list(tab: String) {
     logic::refresh(cache_directory, tab, true, true); // cli_list_mode is set to true, this will print assets to console
 }
 
-fn extract(tab: String, asset: Option<String>, destination: Option<PathBuf>, add_extention: bool) {
+fn extract(tab: String, asset: Option<String>, destination: Option<PathBuf>, add_extension: bool) {
     let cache_directory = logic::get_mode_cache_directory(&tab);
     if let Some(asset) = asset {
-        let dest = destination.unwrap_or(asset.clone().into());
-        logic::extract_file(cache_directory.join(asset), &tab, dest, add_extention);
+        let dest = destination.unwrap_or_else(|| asset.clone().into());
+        logic::extract_file(cache_directory.join(asset), &tab, dest, add_extension);
     } else {
         if let Some(dest) = destination {
             logic::refresh(cache_directory.clone(), tab.clone(), true, true);
@@ -238,16 +242,16 @@ fn main() {
         if let Some(category) = args.mode {
             list(get_tab(category));
         } else {
-            // Not enough arguments - go through all
+            // Not enough arguments - go through all categories
             for category in logic::get_categories() {
                 list(category);
             }
         }
-    } else if let Some(asset) = args.extract  {
+    } else if args.extract.is_some() || args.extract_all {
         if let Some(category) = args.mode {
-            extract(get_tab(category), asset, args.dest, args.extention);
+            extract(get_tab(category), args.extract, args.dest, args.extension);
         } else {
-            // Not enough arguments - go through all
+            // Not enough arguments - go through all categories
             if let Some(destination) = args.dest {
                 logic::extract_all(destination, true, false);
             } else {
