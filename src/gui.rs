@@ -22,7 +22,7 @@ mod settings;
 const VERSION: &str = env!("CARGO_PKG_VERSION"); // Get version for use in the filename
 const COMPILE_DATE: &str = env!("COMPILE_DATE");
 const ICON: &[u8; 11400] = include_bytes!("../assets/icon.png");
-const CONTRIBUTORS: [&str; 4] = [
+const CONTRIBUTORS: [&str; 5] = [
     "AeEn123",
     "Vonercent",
     "MarcelDev",
