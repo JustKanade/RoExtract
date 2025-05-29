@@ -22,7 +22,7 @@ mod settings;
 const VERSION: &str = env!("CARGO_PKG_VERSION"); // Get version for use in the filename
 const COMPILE_DATE: &str = env!("COMPILE_DATE");
 const ICON: &[u8; 11400] = include_bytes!("../assets/icon.png");
-const CONTRIBUTORS: [&str; 4] = [
+const CONTRIBUTORS: [&str; 5] = [
     "AeEn123",
     "Vonercent",
     "MarcelDev",
@@ -986,8 +986,8 @@ fn detect_cjk_font() -> Option<std::path::PathBuf> {
         // macOS CJK fonts
         "/System/Library/Fonts/PingFang.ttc",                          // PingFang (Chinese)
         "/System/Library/Fonts/Hiragino Sans GB.ttc",                  // Hiragino Sans GB Simplified Chinese
-        "/Library/Fonts/Songti.ttc",                                   // Songti
-        "/System/Library/Fonts/STHeiti Light.ttc",                     // STHeiti
+        "/Library/Fonts/Songti.ttc",                                   // Songti (Chinese)
+        "/System/Library/Fonts/STHeiti Light.ttc",                     // STHeiti (Chinese)
         "/System/Library/Fonts/Hiragino Kaku Gothic ProN.ttc",         // Japanese font
         
         // User font directories
@@ -1115,7 +1115,7 @@ impl eframe::App for MyApp {
             .show_leaf_close_all_buttons(false)
             .show_leaf_collapse_buttons(false)
             .show(ctx, &mut TabViewer { 
-                // Pass selected as a mutable referance
+                // Pass selected as a mutable reference
                 selected: &mut self.selected,
                 renaming: &mut self.renaming,
                 searching: &mut self.searching,
