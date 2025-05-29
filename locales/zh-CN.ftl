@@ -1,6 +1,6 @@
-# translated by me mashing my keyboard at 10 pm
+# translated by @JustKanade
 # Language info 
-language-name = zh-CN
+language-name = 简体中文
 
 # Tabs
 music = 音乐
