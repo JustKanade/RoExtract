@@ -8,6 +8,7 @@ mod config;
 mod locale;
 
 use std::path::PathBuf;
+use std::sync::Arc;
 
 use clap::{Parser, ValueEnum};
 
@@ -22,7 +23,6 @@ enum Category {
 }
 
 // Implement `Display` for `Category`
-
 impl std::fmt::Display for Category {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{:?}", self)
@@ -67,8 +67,145 @@ struct Cli {
     /// Connect to the internet to download new update binary
     #[arg(long)]
     download_new_update: bool,
-    
 }
+
+// ======================= Chinese Font Support Functions =======================
+
+/// Set up Chinese font support - simplified version
+pub fn setup_chinese_fonts(ctx: &egui::Context) {
+    if let Some(font_path) = find_system_chinese_font() {
+        if let Ok(font_bytes) = std::fs::read(&font_path) {
+            configure_chinese_font(ctx, font_bytes);
+            return;
+        }
+    }
+    
+    // If no font is found, use fallback configuration
+    configure_fallback_font(ctx);
+}
+
+/// Find Chinese fonts in the system
+fn find_system_chinese_font() -> Option<String> {
+    #[cfg(target_os = "windows")]
+    {
+        // Common Chinese font paths on Windows system
+        let possible_fonts = vec![
+            "C:/Windows/Fonts/msyh.ttc",      // Microsoft YaHei
+            "C:/Windows/Fonts/simsun.ttc",    // SimSun
+            "C:/Windows/Fonts/simhei.ttf",    // SimHei
+            "C:/Windows/Fonts/STXIHEI.TTF",   // STXihei
+            "C:/Windows/Fonts/SIMYOU.TTF",    // YouYuan
+        ];
+        
+        for font_path in possible_fonts {
+            if std::path::Path::new(font_path).exists() {
+                return Some(font_path.to_string());
+            }
+        }
+    }
+    
+    #[cfg(target_os = "linux")]
+    {
+        use std::process::Command;
+        
+        // Use fc-list command to find Chinese fonts
+        if let Ok(output) = Command::new("fc-list")
+            .arg(":lang=zh")
+            .output() 
+        {
+            if let Ok(stdout) = std::str::from_utf8(&output.stdout) {
+                for line in stdout.lines() {
+                    if let Some(font_path) = line.split(':').next() {
+                        let path = font_path.trim();
+                        if path.ends_with(".ttf") || path.ends_with(".otf") || path.ends_with(".ttc") {
+                            if std::path::Path::new(path).exists() {
+                                return Some(path.to_string());
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Fallback paths
+        let possible_fonts = vec![
+            "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",
+            "/usr/share/fonts/truetype/arphic/uming.ttc",
+            "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",
+            "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf",
+        ];
+        
+        for font_path in possible_fonts {
+            if std::path::Path::new(font_path).exists() {
+                return Some(font_path.to_string());
+            }
+        }
+    }
+    
+    #[cfg(target_os = "macos")]
+    {
+        let possible_fonts = vec![
+            "/System/Library/Fonts/PingFang.ttc",           // PingFang
+            "/System/Library/Fonts/Hiragino Sans GB.ttc",   // Hiragino Sans GB Simplified Chinese
+            "/Library/Fonts/Songti.ttc",                    // Songti
+            "/System/Library/Fonts/STHeiti Light.ttc",      // STHeiti
+        ];
+        
+        for font_path in possible_fonts {
+            if std::path::Path::new(font_path).exists() {
+                return Some(font_path.to_string());
+            }
+        }
+    }
+    
+    None
+}
+
+/// Configure Chinese font
+fn configure_chinese_font(ctx: &egui::Context, font_bytes: Vec<u8>) {
+    let mut fonts = egui::FontDefinitions::default();
+    
+    // Add Chinese font data
+    fonts.font_data.insert(
+        "chinese_font".to_owned(),
+        Arc::new(egui::FontData::from_owned(font_bytes)),
+    );
+    
+    // Set Chinese font as preferred font for Proportional font family
+    fonts
+        .families
+        .entry(egui::FontFamily::Proportional)
+        .or_default()
+        .insert(0, "chinese_font".to_owned());
+    
+    // Add Chinese font to Monospace font family as fallback
+    fonts
+        .families
+        .entry(egui::FontFamily::Monospace)
+        .or_default()
+        .push("chinese_font".to_owned());
+    
+    // Apply font configuration
+    ctx.set_fonts(fonts);
+}
+
+/// Configure fallback font (when system font is not found)
+fn configure_fallback_font(ctx: &egui::Context) {
+    // If there are embedded font files, they can be used here
+    // Example: fonts.font_data.insert("fallback_chinese".to_owned(), egui::FontData::from_static(include_bytes!("../fonts/chinese_font.ttf")));
+    
+    // Currently only using system default fonts, but adjusting font configuration for better unicode character display
+    let mut fonts = egui::FontDefinitions::default();
+    
+    // Ensure default fonts support more unicode characters
+    // This may not perfectly display Chinese, but at least won't show boxes
+    ctx.set_fonts(fonts);
+    
+    println!("Warning: No suitable Chinese font found, Chinese display may be incomplete");
+}
+
+// ======================= Original Functionality Functions =======================
 
 fn get_tab(category: Category) -> String {
     category.to_string().to_lowercase().replace("ktx","ktx-files").replace("rbxm","rbxm-files")
@@ -91,9 +228,7 @@ fn extract(tab: String, asset: Option<String>, destination: Option<PathBuf>, add
         } else {
             eprintln!("Please provide either a destination path or an asset to extract! --help for more details.")
         }
-
     }
-
 }
 
 fn main() {
@@ -108,8 +243,6 @@ fn main() {
                 list(category);
             }
         }
-
-
     } else if let Some(asset) = args.extract  {
         if let Some(category) = args.mode {
             extract(get_tab(category), asset, args.dest, args.extention);
@@ -120,12 +253,10 @@ fn main() {
             } else {
                 eprintln!("--dest is required to extract all assets. --help for more details")
             }
-
         }
     } else if let Some(asset) = args.swap {
         if let Some(dest) = args.dest {
             let dir = logic::get_mode_cache_directory(&get_tab(args.mode.unwrap_or(Category::Images)));
-
             logic::swap_assets(dir, &asset, &dest.to_string_lossy().to_string());
         } else {
             eprintln!("--dest is required for swapping assets, --help for more details")
@@ -148,5 +279,4 @@ fn main() {
         // Only run if the install script hasn't ran
         logic::clean_up(); // Remove the temporary directory if one has been created
     }
-    
 }

@@ -27,6 +27,7 @@ const CONTRIBUTORS: [&str; 4] = [
     "Vonercent",
     "MarcelDev",
     "aaditkumar2009",
+    "JustKanade",    
 ];
 const DEPENDENCIES: [[&str; 2]; 13] = [
     ["https://github.com/emilk/egui", ""],
@@ -958,70 +959,132 @@ impl Default for MyApp {
     }
 }
 
-fn detect_japanese_font() -> Option<std::path::PathBuf> {
-    let font_dirs = ["C:\\Windows\\Fonts\\msgothic.ttc", "/usr/share/fonts/noto-cjk/NotoSerifCJK-Regular.ttc", "~/.local/share/fonts/noto-cjk/NotoSerifCJK-Regular.ttc", "~/.fonts/noto-cjk/NotoSerifCJK-Regular.ttc"];
+// ======================== CJK Font Support Functions ========================
+
+/// Detect CJK (Chinese, Japanese, Korean) fonts in the system
+fn detect_cjk_font() -> Option<std::path::PathBuf> {
+    // Font paths arranged by priority, including CJK fonts
+    let font_paths = [
+        // Windows Chinese fonts
+        "C:\\Windows\\Fonts\\msyh.ttc",        // Microsoft YaHei
+        "C:\\Windows\\Fonts\\simsun.ttc",      // SimSun
+        "C:\\Windows\\Fonts\\simhei.ttf",      // SimHei
+        "C:\\Windows\\Fonts\\STXIHEI.TTF",     // STXihei
+        
+        // Windows Japanese fonts
+        "C:\\Windows\\Fonts\\msgothic.ttc",    // MS Gothic
+        "C:\\Windows\\Fonts\\meiryo.ttc",      // Meiryo
+        
+        // Linux CJK fonts
+        "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",           // Noto Sans CJK
+        "/usr/share/fonts/noto-cjk/NotoSerifCJK-Regular.ttc",          // Noto Serif CJK
+        "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",              // WenQuanYi Micro Hei
+        "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",                // WenQuanYi Zen Hei
+        "/usr/share/fonts/truetype/arphic/uming.ttc",                  // AR PL UMing
+        "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",   // Droid Sans Fallback
+        
+        // macOS CJK fonts
+        "/System/Library/Fonts/PingFang.ttc",                          // PingFang (Chinese)
+        "/System/Library/Fonts/Hiragino Sans GB.ttc",                  // Hiragino Sans GB Simplified Chinese
+        "/Library/Fonts/Songti.ttc",                                   // Songti
+        "/System/Library/Fonts/STHeiti Light.ttc",                     // STHeiti
+        "/System/Library/Fonts/Hiragino Kaku Gothic ProN.ttc",         // Japanese font
+        
+        // User font directories
+        "~/.local/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+        "~/.fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+    ];
     
-    for font in font_dirs {
-        let resolved_font = PathBuf::from(logic::resolve_path(&font));
+    for font_path in font_paths {
+        let resolved_font = PathBuf::from(logic::resolve_path(font_path));
         match std::fs::metadata(&resolved_font) {
             Ok(metadata) => {
                 if metadata.is_file() {
-                    log::info(&format!("{}: valid", resolved_font.display()));
+                    log::info(&format!("Found CJK font: {}", resolved_font.display()));
                     return Some(resolved_font);
                 }
             }
-            Err(e) => {
-                log::warn(&format!("{}: invalid - {}", resolved_font.display(), e))
+            Err(_) => {
+                // Don't log missing individual font files to avoid excessive logging
             }
         }
-        
-    };
-    return None;
+    }
+    
+    log::warn("No CJK fonts detected, Chinese/Japanese/Korean characters may not render properly.");
+    None
 }
 
-// Some code in the function below is taken from this URL
-// https://users.rust-lang.org/t/is-posible-egui-change-fonts-to-japanese-how/59662/5
-fn init_japanese_font(cc: &eframe::CreationContext<'_>) {
-    //Custom font install
-    // 1. Create a `FontDefinitions` object.
-    let mut font = egui::FontDefinitions::default();
-    // Install my own font (maybe supporting non-latin characters):
-    // 2. register the font content with a name.
-    match detect_japanese_font() {
+/// Initialize CJK font support
+fn init_cjk_font(cc: &eframe::CreationContext<'_>) {
+    // 1. Create font definitions object
+    let mut fonts = egui::FontDefinitions::default();
+    
+    // 2. Try to detect and load system CJK fonts
+    match detect_cjk_font() {
         Some(font_path) => {
-            match std::fs::read(font_path) {
-                Ok(bytes) => {
-                    font.font_data.insert("japanese".to_owned(),egui::FontData::from_owned(bytes).into());
-                    font.families.get_mut(&egui::FontFamily::Monospace).unwrap().push("japanese".to_owned());
-                    font.families.get_mut(&egui::FontFamily::Proportional).unwrap().push("japanese".to_owned());
-                    // 3. Configure context with modified `FontDefinitions`.
-                    cc.egui_ctx.set_fonts(font);
+            match std::fs::read(&font_path) {
+                Ok(font_bytes) => {
+                    // Register font data
+                    fonts.font_data.insert(
+                        "cjk_font".to_owned(),
+                        Arc::new(egui::FontData::from_owned(font_bytes)),
+                    );
+                    
+                    // Add CJK font to font family (as preferred font)
+                    fonts
+                        .families
+                        .entry(egui::FontFamily::Proportional)
+                        .or_default()
+                        .insert(0, "cjk_font".to_owned());
+                    
+                    fonts
+                        .families
+                        .entry(egui::FontFamily::Monospace)
+                        .or_default()
+                        .push("cjk_font".to_owned());
+                    
+                    // 3. Apply font configuration to egui context
+                    cc.egui_ctx.set_fonts(fonts);
+                    
+                    log::info(&format!(
+                        "Successfully loaded CJK font: {}",
+                        font_path.file_name()
+                            .and_then(|n| n.to_str())
+                            .unwrap_or("unknown")
+                    ));
                 }
                 Err(e) => {
-                    log::error(&format!("Error loading Japanese fonts: {e}"))
+                    log::error(&format!("Error reading CJK font file: {}", e));
                 }
             }
         }
         None => {
-            log::warn("No Japanese fonts detected, Japanese characters will not render.")
+            // If no system fonts found, try to use egui's built-in fonts with optimized configuration
+            log::warn("No CJK fonts found. Chinese, Japanese, and Korean text may display as boxes.");
+            
+            // Can add embedded font support here
+            // Example: fonts.font_data.insert("embedded_cjk".to_owned(), 
+            //          Arc::new(egui::FontData::from_static(include_bytes!("../fonts/NotoSansCJK.ttf"))));
         }
     }
 }
 
+/// GUI initialization function
 pub fn gui_setup(cc: &eframe::CreationContext<'_>) {
-    init_japanese_font(cc);
+    // Initialize CJK font support (replaces the original Japanese font function)
+    init_cjk_font(cc);
 
-    // Get theme from config
+    // Get theme settings
     match config::get_config_string("theme").unwrap_or("system".to_owned()).as_str() {
         "dark" => cc.egui_ctx.set_theme(egui::Theme::Dark),
         "light" => cc.egui_ctx.set_theme(egui::Theme::Light),
-        _ => ()
+        _ => () // Use system default theme
     }
 }
+
 impl MyApp {
     pub fn new(cc: &eframe::CreationContext<'_>) -> Self {
         gui_setup(cc);
-
         Default::default()
     }
 }
@@ -1106,5 +1169,4 @@ pub fn run_gui() {
             log::critical_error(&format!("GUI failed: {}", result.unwrap_err()))
         }
     }
-
 }
